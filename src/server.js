@@ -164,6 +164,7 @@ async function sendMessage(request, response){
     message = request.query.message;
   }
 
+try {
   if (!to) {
     client.messages.create({
       body: message|| `Hello from Node`,
@@ -177,6 +178,13 @@ async function sendMessage(request, response){
       from: callerNumber // From a valid Twilio number
   }).then((message) => {return response.send(message.sid);});
   }
+} catch (e) {
+  console.log('error');
+  console.log(e);
+} finally {
+  console.log('all done');
+}
+
 
 }
 function welcome() {
