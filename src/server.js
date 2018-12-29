@@ -151,7 +151,7 @@ function incoming() {
   return voiceResponse.toString();
 }
 
-function sendMessage(request, response){
+async function sendMessage(request, response){
   var client = new twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
   var to = null;
   var message = null;
@@ -172,7 +172,7 @@ function sendMessage(request, response){
     }).then((message) => {return response.send(message.sid);});
   }else{
     client.messages.create({
-      body: `Hello from Node ${callerNumber}`,
+      body: message|| `Hello from Node`,
       to: to,  // Text this number
       from: callerNumber // From a valid Twilio number
   }).then((message) => {return response.send(message.sid);});
