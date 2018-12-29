@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 const methods = require('./src/server.js');
 const tokenGenerator = methods.tokenGenerator;
 const makeCall = methods.makeCall;
+const sendMessage = methods.sendMessage;
 const placeCall = methods.placeCall;
 const incoming = methods.incoming;
 const welcome = methods.welcome;
@@ -41,7 +42,12 @@ app.get('/makeCall', function(request, response) {
 app.post('/makeCall', function(request, response) {
   makeCall(request, response);
 });
-
+app.get('/sendMessage', function(request, response) {
+  sendMessage(request, response);
+});
+app.post('/sendMessage', function(request, response) {
+  sendMessage(request, response);
+});
 app.get('/placeCall', placeCall);
 
 app.post('/placeCall', placeCall);

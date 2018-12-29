@@ -1,12 +1,13 @@
 require('dotenv').load();
 
+var twilio = require('twilio');
 const AccessToken = require('twilio').jwt.AccessToken;
 const VoiceGrant = AccessToken.VoiceGrant;
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const defaultIdentity = 'alice';
 const callerId = 'client:quick_start';
 // Use a valid Twilio number by adding to your account via https://www.twilio.com/console/phone-numbers/verified
-const callerNumber = '1234567890';
+const callerNumber = process.env.PHONE_NUMBER;
 
 /**
  * Creates an access token with VoiceGrant using your Twilio credentials.
@@ -150,6 +151,34 @@ function incoming() {
   return voiceResponse.toString();
 }
 
+function sendMessage(request, response){
+  var client = new twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
+  var to = null;
+  var message = null;
+
+  if (request.method == 'POST') {
+    to = request.body.to;
+    message = request.body.message;
+  } else {
+    to = request.query.to;
+    message = request.query.message;
+  }
+
+  if (!to) {
+    client.messages.create({
+      body: message|| `Hello from Node`,
+      to: '+447828935781',  // Text this number
+      from: callerNumber // From a valid Twilio number
+    }).then((message) => {return response.send(message.sid);});
+  }else{
+    client.messages.create({
+      body: `Hello from Node ${callerNumber}`,
+      to: to,  // Text this number
+      from: callerNumber // From a valid Twilio number
+  }).then((message) => {return response.send(message.sid);});
+  }
+
+}
 function welcome() {
   const voiceResponse = new VoiceResponse();
   voiceResponse.say("Welcome to Twilio");
@@ -182,5 +211,6 @@ function isNumber(to) {
 exports.tokenGenerator = tokenGenerator;
 exports.makeCall = makeCall;
 exports.placeCall = placeCall;
+exports.sendMessage = sendMessage;
 exports.incoming = incoming;
 exports.welcome = welcome;
