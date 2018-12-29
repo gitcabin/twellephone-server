@@ -171,13 +171,17 @@ try {
       body: message|| `Hello from Node`,
       to: '+447828935781',  // Text this number
       from: callerNumber // From a valid Twilio number
-    }).then((message) => {    console.log('2'); return response.send(message.sid);});
+    }).then((message) => {    console.log('2'); return response.send(message.sid);}, error => {
+    console.error( 'onRejected function called: ' + error.message );
+  });
   }else{
     client.messages.create({
       body: message|| `Hello from Node`,
       to: to,  // Text this number
       from: callerNumber // From a valid Twilio number
-  }).then((message) => {    console.log('3'); return response.send(message.sid);});
+  }).then((message) => {    console.log('3'); return response.send(message.sid);}, error => {
+  console.error( 'onRejected function called: ' + error.message );
+});
   }
 } catch (e) {
   console.log('error');
