@@ -165,18 +165,19 @@ async function sendMessage(request, response){
   }
 
 try {
+    console.log('1');
   if (!to) {
     client.messages.create({
       body: message|| `Hello from Node`,
       to: '+447828935781',  // Text this number
       from: callerNumber // From a valid Twilio number
-    }).then((message) => {return response.send(message.sid);});
+    }).then((message) => {    console.log('2'); return response.send(message.sid);});
   }else{
     client.messages.create({
       body: message|| `Hello from Node`,
       to: to,  // Text this number
       from: callerNumber // From a valid Twilio number
-  }).then((message) => {return response.send(message.sid);});
+  }).then((message) => {    console.log('3'); return response.send(message.sid);});
   }
 } catch (e) {
   console.log('error');
